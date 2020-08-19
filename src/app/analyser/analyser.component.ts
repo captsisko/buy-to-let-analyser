@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
-interface MoneyIn {
+/* interface MoneyIn {
   deposit: string;
   fees: string;
   renovations: string;
   furniture: string;
-}
+} */
 
 @Component({
   selector: 'app-analyser',
@@ -19,16 +19,17 @@ export class AnalyserComponent implements OnInit {
   mortgage: number;
   mortgagePayments: number;
   deposit: number;
-  purchase: number;
+  // purchase: number;
   fees: number;
   management: number;
-  maintainance: number;
+  // maintainance: number;
   monthlyCashFlow: number;
   annualCashFlow: number;
   totalMoneyIn: number;
   totalMoneyOut: number;
   totalMoneyROI: number;
   achieveableRent: number;
+  purchaseValue: number;
 
   constructor(private fb: FormBuilder) { }
 
@@ -36,6 +37,8 @@ export class AnalyserComponent implements OnInit {
     this.totalMoneyIn = 0;
     this.totalMoneyOut = 0;
     this.totalMoneyROI = 0;
+    this.purchaseValue = 0;
+    this.achieveableRent = 0;
 
     /*
       setting up the reactive form
@@ -64,29 +67,16 @@ export class AnalyserComponent implements OnInit {
         annual_cashFlow: new FormControl(0)
       })
     });
+  }
 
-    /*
-      The following dual sections of code detect changes to the purchase-value and achieveable-rent fields,
-      then trigger a function call which populates other fields with percentages of their respective values
-    */
-    this.analysisForm.get(['market', 'purchase_value']).valueChanges.subscribe((data) => {
-      this.setPercentages(1);
-      this.sum();
-    });
-
-    this.analysisForm.get(['market', 'achieveable_rent']).valueChanges.subscribe((data) => {
-      this.setPercentages(1);
-      this.sum();
-    });
-
-    // this.setPercentages(1);
-    // this.sum();
+  trigger() {
+    this.sum();
   }
 
   sum() {
     let totalIn = 0;
     let totalOut = 0;
-    const totalROI = 0;
+
     setTimeout(() => {
       Object.keys(this.analysisForm.value.moneyIn).forEach(key => {
         totalIn += this.analysisForm.value.moneyIn[key];
@@ -97,53 +87,72 @@ export class AnalyserComponent implements OnInit {
         totalOut += this.analysisForm.value.moneyOut[key];
         this.totalMoneyOut = totalOut;
       });
-
-      // console.log(this.analysisForm.get(['ROI', 'monthly_cashFlow']).value + '/' + this.totalMoneyIn);
-      this.totalMoneyROI = ( this.analysisForm.get(['market', 'purchase_value']).value && this.analysisForm.get(['market', 'achieveable_rent']).value )
-                            ? (this.analysisForm.get(['ROI', 'annual_cashFlow']).value / this.totalMoneyIn) * 100
-                            : 0;
-
     }, 500);
   }
 
-  setPercentages(step: number) {
-    setTimeout(() => {
-      if ( step === 1 ) {
+  setPercentages(section: string) {
+
+    if ( section === 'purchase_value' ) {
+      this.analysisForm.get(['market', 'purchase_value']).valueChanges.subscribe((value) => {
         this.analysisForm.patchValue({
           market: {
-            outstanding_mortgage: this.analysisForm.value.market.purchase_value * 0.75,
-          }
-        });
-    //   }
-    // }, 250);
-
-    // setTimeout(() => {
-    //   if ( step === 2 ) {
-        this.analysisForm.patchValue({
+            outstanding_mortgage: value * 0.75,
+          },
           moneyIn: {
-            deposit: this.analysisForm.value.market.purchase_value * 0.25,
-            fees: this.analysisForm.value.market.purchase_value * 0.04
+            deposit: value * 0.25,
+            fees: value * 0.04,
           },
           moneyOut: {
-            mortgage_payments: (this.analysisForm.value.market.outstanding_mortgage * 0.03) / 12,
-            management: this.analysisForm.value.market.achieveable_rent * 0.12,
-            maintainance: this.analysisForm.value.market.achieveable_rent * 0.10
+            mortgage_payments: ((value * 0.75) * 0.03) / 12,
           }
         });
 
+        this.purchaseValue = value;
+      });
+    }
+
+    if ( section === 'achieveable_rent' ) {
+      this.analysisForm.get(['market', 'achieveable_rent']).valueChanges.subscribe((value) => {
+        this.analysisForm.patchValue({
+          moneyOut: {
+            management: value * 0.12,
+            maintainance: value * 0.10
+          }
+        });
+
+        this.achieveableRent = value;
+      });
+    }
+
+    // set the ROI values
+    this.ROI();
+
+    // set the summations
+    this.sum();
+
+  }
+
+  ROI() {
+    setTimeout(() => {
+
+      if ( this.purchaseValue && this.achieveableRent ) {
+        console.log('GOT BOTH!');
         this.analysisForm.patchValue({
           ROI: {
-            monthly_cashFlow: ( this.analysisForm.get(['market', 'purchase_value']).value && this.analysisForm.get(['market', 'achieveable_rent']).value )
-                            ? this.analysisForm.get(['market', 'achieveable_rent']).value - this.totalMoneyOut
-                            : 0,
-            annual_cashFlow: ( this.analysisForm.get(['market', 'purchase_value']).value && this.analysisForm.get(['market', 'achieveable_rent']).value )
-                            ? this.analysisForm.get(['ROI', 'monthly_cashFlow']).value * 12
-                            : 0,
+            monthly_cashFlow: this.purchaseValue && this.achieveableRent
+              ? this.analysisForm.get(['market', 'achieveable_rent']).value - this.totalMoneyOut
+              : 0,
+            annual_cashFlow: this.purchaseValue && this.achieveableRent
+              ? this.analysisForm.get(['ROI', 'monthly_cashFlow']).value * 12
+              : 0,
           }
         });
-
       }
-    }, 500);
+
+      // this sets the annual return-on-investment percentage
+      this.totalMoneyROI = (this.analysisForm.get(['ROI', 'annual_cashFlow']).value / this.totalMoneyIn) * 100;
+
+    }, 2000);
 
   }
 

@@ -8,15 +8,15 @@
         </tr>
         <tr>
           <th scope="row"> <label for="purchaseValueInput">Purchase price </label> </th>
-          <td> <input type="number" class="form-control" min='0' id="purchaseValueInput" formControlName="purchase_value" > </td>
+          <td> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="purchaseValueInput" formControlName="purchase_value" (keydown)="setPercentages('purchase_value')"> </td>
         </tr>
         <tr>
           <th scope="row"> <label for="achieveableRentInput">Achievable monthly rent? </label> </th>
-          <td colspan="2"> <input type="number" class="form-control" min='0' id="achieveableRentInput" formControlName="achieveable_rent" [value]="achieveableRent" > </td>
+          <td colspan="2"> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="achieveableRentInput" formControlName="achieveable_rent" [value]="achieveableRent" (keydown)="setPercentages('achieveable_rent')"> </td>
         </tr>
         <tr>
           <th scope="row"> <label for="outstandingMortgageInput">Outstanding mortgage? </label><br><small>(75% of purchase price)</small></th>
-          <td colspan="2"> <input type="number" class="form-control" min='0' id="outstandingMortgageInput" formControlName="outstanding_mortgage" [value]="mortgage" > </td>
+          <td colspan="2"> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="outstandingMortgageInput" formControlName="outstanding_mortgage" [value]="mortgage" > </td>
         </tr>
     </tbody>
 
@@ -24,19 +24,19 @@
         <tr class="table-dark"><td colspan="2">Money INvested</td></tr>
         <tr>
           <th scope="row"> <label for="depositValueInput">Deposit Value</label><br><small>(25% of purchase price)</small> </th>
-          <td> <input type="number" class="form-control" min='0' id="depositValueInput" formControlName="deposit" [value]="deposit"> </td>
+          <td> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="depositValueInput" formControlName="deposit" [value]="deposit"> </td>
         </tr>
         <tr>
           <th scope="row"> <label for="feesValueInput">Tax and legal fees </label><br><small>(4% of purchase price)</small> </th>
-          <td> <input type="number" class="form-control" min='0' id="feesValueInput" formControlName="fees" [value]="fees"> </td>
+          <td> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="feesValueInput" formControlName="fees" [value]="fees"> </td>
         </tr>
         <tr>
           <th scope="row"> <label for="renovationsInput">Renovations </label><br><small>(min £2,000 for fire safety)</small> </th>
-          <td colspan="2"> <input type="number" class="form-control" min='0' id="renovationsInput" formControlName="renovations"> </td>
+          <td colspan="2"> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="renovationsInput" formControlName="renovations"> </td>
         </tr>
         <tr>
           <th scope="row"> <label for="furnitureInput">Furniture </label><br><small>(est. £5,000 for high end)</small></th>
-          <td colspan="2"> <input type="number" class="form-control" min='0' id="furnitureInput" formControlName="furniture"> </td>
+          <td colspan="2"> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="furnitureInput" formControlName="furniture"> </td>
         </tr>
         <tr class="table-warning">
           <th scope="row"> <label for="totalMoneyIn">Total Money In </label></th>
@@ -48,19 +48,19 @@
         <tr class="table-dark"><td colspan="2">Monthly Expenditure</td></tr>
         <tr>
           <th scope="row"> <label for="mortgagePaymentValueInput">Mortgage payments</label><br><small>(0.03 x outstanding mortgage / 12)</small> </th>
-          <td> <input type="number" class="form-control" min='0' id="mortgagePaymentValueInput" formControlName="mortgage_payments" [value]="mortgagePayments"> </td>
+          <td> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="mortgagePaymentValueInput" formControlName="mortgage_payments" [value]="mortgagePayments"> </td>
         </tr>
         <tr>
           <th scope="row"> <label for="managementValueInput">Management </label><br><small>(12% of rent)</small> </th>
-          <td> <input type="number" class="form-control" min='0' id="managementValueInput" formControlName="management" [value]="management"> </td>
+          <td> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="managementValueInput" formControlName="management" [value]="management"> </td>
         </tr>
         <tr>
           <th scope="row"> <label for="maintainanceValueInput">Maintenance /voids </label><br><small>(10% of rent)</small> </th>
-          <td colspan="2"> <input type="number" class="form-control" min='0' id="maintainanceValueInput" formControlName="maintainance"> </td>
+          <td colspan="2"> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="maintainanceValueInput" formControlName="maintainance"> </td>
         </tr>
         <tr>
           <th scope="row"> <label for="billValue">Bills and running costs </label><br><small>(Min £300)</small></th>
-          <td colspan="2"> <input type="number" class="form-control" min='0' id="billValue" formControlName="bills"> </td>
+          <td colspan="2"> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="billValue" formControlName="bills"> </td>
         </tr>
         <tr class="table-warning">
           <th scope="row"> <label for="totalMoneyOut">Total Money Out </label></th>
@@ -72,11 +72,11 @@
         <tr class="table-dark"><td colspan="2">Return On Investment</td></tr>
         <tr>
           <th scope="row"> <label for="monthlyCashFlowValueInput">Monthly Cashflow </label><br><small>(rent - expenditure)</small> </th>
-          <td> <input type="number" class="form-control" min='0' id="monthlyCashFlowValueInput" formControlName="monthly_cashFlow" [value]="monthlyCashFlow"> </td>
+          <td> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="monthlyCashFlowValueInput" formControlName="monthly_cashFlow" [value]="monthlyCashFlow"> </td>
         </tr>
         <tr>
           <th scope="row"> <label for="annualCashFlowValueInput">Annual Cashflow </label><br><small>(monthly cashflow x 12)</small> </th>
-          <td> <input type="number" class="form-control" min='0' id="annualCashFlowValueInput" formControlName="annual_cashFlow" [value]="annualCashFlow"> </td>
+          <td> <input (keydown)="trigger()" type="number" class="form-control" min='0' id="annualCashFlowValueInput" formControlName="annual_cashFlow" [value]="annualCashFlow"> </td>
         </tr>
         <tr class="table-warning">
           <th scope="row"> <label for="totalMoneyOut">ROI</label><small>(Annual Cashflow / Total Money in x 100)</small></th>

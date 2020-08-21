@@ -45,10 +45,10 @@ export class AnalyserComponent implements OnInit {
     */
     this.analysisForm  = new FormGroup({
       market : new FormGroup({
-        market_value: new FormControl({value: 0}, Validators.required),
+        market_value: new FormControl(0, Validators.required),
         purchase_value: new FormControl(0, Validators.required),
         achieveable_rent: new FormControl(0, Validators.required),
-        outstanding_mortgage: new FormControl({value: 0})
+        outstanding_mortgage: new FormControl(0)
       }),
       moneyIn : new FormGroup({
         deposit: new FormControl(0),
@@ -70,7 +70,10 @@ export class AnalyserComponent implements OnInit {
   }
 
   trigger() {
+    // sums up the different sections in response to value changes
     this.sum();
+    // recalculates return-on-investment in response to value changes
+    this.ROI();
   }
 
   sum() {
@@ -149,17 +152,13 @@ export class AnalyserComponent implements OnInit {
         });
       }
 
-      // this sets the annual return-on-investment percentage
+      /* this sets the annual return-on-investment percentage */
       this.totalMoneyROI = (this.analysisForm.get(['ROI', 'annual_cashFlow']).value / this.totalMoneyIn) * 100;
 
     }, 2000);
 
   }
 
-  submit() {
-    /* Object.keys(this.analysisForm.value.moneyIn).forEach(key => {
-      console.log(this.analysisForm.value.moneyIn[key]);
-    }); */
-  }
+  submit() {}
 
 }

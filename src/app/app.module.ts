@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { AnalyserComponent } from './analyser/analyser.component';
+import { DropdownDirective } from './shared/dropdown.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    AnalyserComponent
+    AnalyserComponent,
+    DropdownDirective
   ],
   imports: [
     BrowserModule,
